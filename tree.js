@@ -34,9 +34,8 @@ class Tree {
           toVisitQueue.push(child);
         }
       }; }
-      console.log("Count:", count);
       return count;
-  }
+  }  // END sumValues()
 
   /** countEvens(): count all of the nodes in the tree with even values. */
 
@@ -50,39 +49,39 @@ class Tree {
       while (toVisitQueue.length > 0) {
         const current = toVisitQueue.shift();
         if (current.val % 2 === 0){
-          count += current.val;
+          count ++;
         };
         for (let child of current.children) {
           toVisitQueue.push(child);
         }
       };  // END While loop...
       };  // END If loop...
-      
-    console.log("Even's Count:", count);
+
     return count;
-    }
+    }  // END countEvens()
 
 
   /** numGreater(lowerBound): return a count of the number of nodes
    * whose value is greater than lowerBound. */
 
   numGreater(lowerBound) {
+    let count = 0;
+    // ensure there is a tree to work with
+    if (this.root){
+        const toVisitQueue = [this.root];
+        while (toVisitQueue.length > 0){
+        const current = toVisitQueue.shift();
+        if (current.val > lowerBound) {
+          count++;
+        }  // END if...
+        for (let child of current.children) {
+          toVisitQueue.push(child);
+        }  // END for loop...
 
+      }  // END while loop...
+    }  // END if...
+  return count;
   }
-}
-
-
-// Testing //////////////////////////////////
-
-const root = new TreeNode(5, [
-  new TreeNode(3, [new TreeNode(2), new TreeNode(4)]),
-  new TreeNode(6),
-]);
-
-const tree = new Tree(root);
-tree.sumValues();
-tree.countEvens();
-
-// END Testing //////////////////////////////////
+}  // END Tree Class
 
 module.exports = { Tree, TreeNode };
