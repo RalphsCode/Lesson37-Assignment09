@@ -17,8 +17,28 @@ class BinaryTree {
    * the length of the shortest path from the root to a leaf. */
 
   minDepth() {
+    
+    let count = 0;
+    if (this.root){
+      // Do a Breadth test
+      const toVisitQueue = [{current: this.root, count: count + 1 }];
+        while (toVisitQueue.length > 0){
+          const {current, count} = toVisitQueue.shift();
+          if (!current.left && !current.right){
+            console.log("minDepth count:", count)
+            return count;
+          } else {
+            if (current.left){ toVisitQueue.push({current: current.left, count: count + 1})};
+            if (current.right){ toVisitQueue.push({current: current.right, count: count + 1})};
+          }
+        }  // END While loop 
+      }  // END if...
+    return count;
+  } // END minDepth()
 
-  }
+
+
+  
 
   /** maxDepth(): return the maximum depth of the tree -- that is,
    * the length of the longest path from the root to a leaf. */
@@ -71,5 +91,20 @@ class BinaryTree {
     
   }
 }
+
+//  Testing ///////////////////////
+
+const node4 = new BinaryTreeNode(4);
+const node5 = new BinaryTreeNode(5);
+const node6 = new BinaryTreeNode(6);
+const node3 = new BinaryTreeNode(3, null, node6);
+const node2 = new BinaryTreeNode(2, node4, node5 );
+const node1 = new BinaryTreeNode(1, node2, node3);
+
+const bTree = new BinaryTree(node1);
+
+bTree.minDepth();
+
+// END Testing ////////////////////
 
 module.exports = { BinaryTree, BinaryTreeNode };
