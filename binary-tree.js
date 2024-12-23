@@ -35,17 +35,34 @@ class BinaryTree {
       }  // END if...
     return count;
   } // END minDepth()
-
-
-
   
 
   /** maxDepth(): return the maximum depth of the tree -- that is,
    * the length of the longest path from the root to a leaf. */
 
   maxDepth() {
+    if (!this.root) return 0;
 
-  }
+    // Start a stack with the root node, and depth of 1
+    let stack = [[this.root, 1]];
+    let maxDepth = 0;
+
+    // Loop through all the nodes in the tree
+    while (stack.length > 0) {
+        // Take the first node in the stack
+        let [current, depth] = stack.pop();
+        // If a node was found
+        if (current) {
+          // Check the current depth and update maxDepth as necessary
+            maxDepth = Math.max(maxDepth, depth); 
+            // If there are children add to the stack array, and increment the depth
+            if (current.left) stack.push([current.left, depth + 1]); 
+            if (current.right) stack.push([current.right, depth + 1]); 
+        }
+    }
+    console.log("maxDepth:", maxDepth);
+    return maxDepth;
+    }
 
   /** maxSum(): return the maximum sum you can obtain by traveling along a path in the tree.
    * The path doesn't need to start at the root, but you can't visit a node more than once. */
@@ -104,6 +121,7 @@ const node1 = new BinaryTreeNode(1, node2, node3);
 const bTree = new BinaryTree(node1);
 
 bTree.minDepth();
+bTree.maxDepth();
 
 // END Testing ////////////////////
 
