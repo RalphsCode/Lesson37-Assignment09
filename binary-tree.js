@@ -38,7 +38,8 @@ class BinaryTree {
   
 
   /** maxDepth(): return the maximum depth of the tree -- that is,
-   * the length of the longest path from the root to a leaf. */
+   * the length of the longest path from the root to a leaf. 
+   * I'm solving this with a Depth First approach. */
 
   maxDepth() {
     if (!this.root) return 0;
@@ -62,21 +63,87 @@ class BinaryTree {
     }
     console.log("maxDepth:", maxDepth);
     return maxDepth;
-    }
+    }  // END maxDepth()
 
   /** maxSum(): return the maximum sum you can obtain by traveling along a path in the tree.
    * The path doesn't need to start at the root, but you can't visit a node more than once. */
 
   maxSum() {
-
-  }
+    if (!this.root) return 0;
+    
+    let maxSum = -Infinity;
+    // Stack will store node, parentSum, isProcessed tuples
+    const stack = [[this.root, 0, false]];
+    // Map to store max sum endng at each node
+    const nodeMaxSums = new Map();
+    
+    while (stack.length > 0) {
+        let [node, parentSum, isProcessed] = stack.pop();
+        // Check if there is a node to process
+        if (!node);
+        // Process the node
+        if (!isProcessed) {
+            // First visit: add node back to stack as processed
+            stack.push([node, parentSum, true]);
+            
+            // Add left and/or right children to stack (as unprocessed)
+            if (node.right) stack.push([node.right, 0, false]);
+            if (node.left) stack.push([node.left, 0, false]);
+        } else {
+            // Get max contributions from the children
+            const leftMaxSum = nodeMaxSums.get(node.left) || 0;
+            const rightMaxSum = nodeMaxSums.get(node.right) || 0;
+            
+            // Calculate max sum ending at current node
+            const maxEndingHere = Math.max(
+                node.val,
+                node.val + Math.max(leftMaxSum, rightMaxSum)
+            );
+            
+            // Update global max sum considering all possible paths through current node
+            maxSum = Math.max(
+                maxSum,
+                maxEndingHere,
+                node.val + leftMaxSum + rightMaxSum
+            );
+            
+            // Store max sum ending at this node
+            nodeMaxSums.set(node, maxEndingHere);
+        } // END IF... ELSE
+    }  // END While loop...
+    
+    console.log("maxSum:", maxSum);
+    return maxSum;
+  }  // END maxSum()
 
   /** nextLarger(lowerBound): return the smallest value in the tree
-   * which is larger than lowerBound. Return null if no such value exists. */
+   * which is larger than lowerBound. Return null if no such value exists. 
+   * I use the Breadth First approach, and return the next larger value. */
 
   nextLarger(lowerBound) {
+      if (!this.root) return null;
 
-  }
+      let toVisitQueue = [this.root];
+      let closest = null;
+  
+      while (toVisitQueue.length) {
+        // Remove from the beginning of array - FIFO
+        let current = toVisitQueue.shift();		
+        if (current.val > lowerBound) {
+          /** Check if the current node value is less than/closer to
+          * the value that was the closest to the passed in argument. */ 
+          if (closest === null || current.val < closest) {
+            closest = current.val;
+          }  // END if...
+          }
+  
+        if (current.left){ toVisitQueue.push(current.left)};
+        if (current.right){ toVisitQueue.push(current.right)};
+      }  // END while loop...
+
+      // return closest which will be null or the closest node value
+      return closest;;
+  }  // END nextLarger()
 
   /** Further study!
    * areCousins(node1, node2): determine whether two nodes are cousins
@@ -122,6 +189,8 @@ const bTree = new BinaryTree(node1);
 
 bTree.minDepth();
 bTree.maxDepth();
+bTree.maxSum();
+bTree.nextLarger(4);
 
 // END Testing ////////////////////
 
